@@ -7,21 +7,16 @@ use bevy::{
 pub struct Grid {
     pub size: IVec2,     // Grid size in rows and columns
     pub cell_size: Vec2, // Size of each cell in pixels
-    pub half_cell_size: Vec2,
 }
 
 impl Grid {
     pub fn new(size: IVec2, cell_size: Vec2) -> Self {
-        Self {
-            size,
-            cell_size,
-            half_cell_size: cell_size / 2.0,
-        }
+        Self { size, cell_size }
     }
 
     /// Calculates the position of a cell's center in pixels on the map.
     pub fn calculate_map_position(&self, grid_position: Vec2) -> Vec2 {
-        grid_position * self.cell_size + self.half_cell_size
+        grid_position * self.cell_size + self.cell_size / 2.0
     }
 
     /// Calculates the grid coordinates from a map position in pixels.
