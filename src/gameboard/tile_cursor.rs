@@ -14,6 +14,12 @@ pub struct MovementTimer {
     repeat_timer: Timer,
 }
 
+#[derive(Resource)]
+pub struct CursorState {
+    pub is_hover_a_unit: bool,
+    pub is_select_a_unit: bool,
+}
+
 impl TileCursor {
     fn new(start_pos: Vec2) -> Self {
         Self {
@@ -141,6 +147,21 @@ pub fn move_tile_cursor(
             } else {
                 Color::WHITE // No highlight (normal state)
             };
+        }
+    }
+}
+
+pub fn check_tile_cursor_state(
+    tile_cursor_query: Query<&TileCursor, Changed<TileCursor>>,
+    unit_query: Query<&Unit>,
+    mut tile_cursor_state: ResMut<CursorState>,
+) {
+    for cursor in tile_cursor_query.iter() {
+        for unit in unit_query.iter() {
+            if cursor.position == unit.position {
+                tile_cursor_state.is_hover_a_unit = true;
+                debug!("cursor is hovering a unit");
+            }
         }
     }
 }
